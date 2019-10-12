@@ -1,0 +1,14 @@
+public interface DAO {
+	
+	public Object update(String str, Object obj) throws Exception;
+	
+	public Object delete(String str, Object obj) throws Exception;
+	
+	public Object selectOne(String str, Object obj) throws Exception;
+	
+	public Object selectByList(String str, Object obj) throws Exception;
+	
+	public Object selectByMap(String sql, Object obj, String key , String value) throws Exception;
+	
+	public Object selectByModel(String sql);
+}

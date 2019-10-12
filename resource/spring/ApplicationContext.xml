@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-3.0.xsd
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	">
+	
+	<!-- 启用注解 -->
+	<context:annotation-config />
+	
+	<!--   
+            为了加载service层中的事务能够成功被spring管理  
+            需要设置spring的配置文件中的注解扫描器不扫描控制层，同时设置springMVC的配置文件不扫描service层。  
+            如果不做此设置，事务无法开启  
+         -->
+	<context:component-scan base-package="com.wx906">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- 完成数据库信息的注入,可以看成是dao的注入 -->
+	<bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">   
+    	<property name="dataSource" ref="c3p0datasource"></property>
+ 	</bean>
+	
+	<!-- 检查数据库的配置文件信息 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+		<property name="locations">  
+			<list>  
+                 <value>/WEB-INF/classes/dbconfig.properties</value>  
+            </list>  
+        </property>  
+	</bean> 
+	
+	<bean id="c3p0datasource" class="com.mchange.v2.c3p0.ComboPooledDataSource">  
+        <property name="jdbcUrl" value="${url}" />  
+         <property name="user" value="${username}" />  
+         <property name="password" value="${password}" />  
+         <property name="driverClass" value="${driverClassName}" />  
+      </bean>
+	<!-- 配置mybatis -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    	<property name="dataSource" ref="c3p0datasource" />
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"></property>
+        <!-- mapper扫描 -->
+        <property name="mapperLocations" value="classpath:mybatis/*/*.xml"></property>
+    </bean>
+    <!-- 3.2 配置sqlSessionTemplate持久化模版（包含了增删查改的模版方法，  
+                   如果不配置的话需要利用sqlsessionfactory来生成sqlsession对象实现对数据库的操作）  
+       --> 
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+	
+</beans>

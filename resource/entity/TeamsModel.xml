@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 命名空间,一般情况下,在当前空间中声明的是,实体类对应的别名 -->
+<mapper namespace="Teams">
+	<!-- resultMap结果集，id属性表示当前标签的名称，type表示：当前结果集所对应的实体类（别名/类地址） -->
+	<!-- 标签中的子节点作用：将实体类中的属性和数据库表中的字段做一一对应 
+		 每一个resultMap表示一个实体类对象
+	-->
+	 <resultMap id="teamsMoBan" type="TeamsModel" >
+	 	<!-- property表示实体类中的属性，column表示所对应的表中的字段 -->
+        <id property="t_id" column="t_id"  /><!-- 主键 -->
+        <result property="t_name" column="t_name"  /><!-- 其他列名 -->
+        <result property="city" column="city"  />
+        <result property="coach" column="coach"  />
+        <collection property="playersList" column="t_id" select="Players.selectOneTeam"></collection>
+    </resultMap>
+    
+    <!-- 创建半自动SQL语句 -->
+    <!-- 全查 -->
+    <!-- select表示当前标签的名称，resultMap表示要使用的结果集(查询结果根据哪一个结果集来进行封装) -->
+    <select id="selectAllteam" resultMap="teamsMoBan">
+    	select * from teams
+    </select>
+    
+    <select id="selectOneteam" resultMap="teamsMoBan" parameterType="string">
+    	select * from teams where t_id = #{t_id}
+    </select>
+    
+
+</mapper>
+
+
+

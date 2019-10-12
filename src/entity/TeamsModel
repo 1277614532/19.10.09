@@ -1,0 +1,54 @@
+public class TeamsModel implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	private int  t_id;
+	private String  t_name;
+	private String  city;
+	private String  coach;
+	//多对一的情况下，一的一方写多的一方的集合
+	private List<PlayersModel> playersList;
+	
+	public List<PlayersModel> getPlayersList() {
+		return playersList;
+	}
+	public void setPlayersList(List<PlayersModel> playersList) {
+		this.playersList = playersList;
+	}
+	public int getT_id() {
+		return t_id;
+	}
+	public void setT_id(int t_id) {
+		this.t_id = t_id;
+	}
+	public String getT_name() {
+		return t_name;
+	}
+	public void setT_name(String t_name) {
+		this.t_name = t_name;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getCoach() {
+		return coach;
+	}
+	public void setCoach(String coach) {
+		this.coach = coach;
+	}
+	public TeamsModel(int t_id, String t_name, String city, String coach) {
+		super();
+		this.t_id = t_id;
+		this.t_name = t_name;
+		this.city = city;
+		this.coach = coach;
+	}
+	@Override
+	public String toString() {
+		return "TeamsModel [t_id=" + t_id + ", t_name=" + t_name + ", city=" + city + ", coach=" + coach + "]";
+	}
+	
+	public TeamsModel() {}
+}

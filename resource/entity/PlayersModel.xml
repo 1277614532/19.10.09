@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 命名空间,一般情况下,在当前空间中声明的是,实体类对应的别名 -->
+<mapper namespace="Players">
+	<!-- resultMap结果集，id属性表示当前标签的名称，type表示：当前结果集所对应的实体类（别名/类地址） -->
+	<!-- 标签中的子节点作用：将实体类中的属性和数据库表中的字段做一一对应 
+		 每一个resultMap表示一个实体类对象
+	-->
+	 <resultMap id="playersMoBan" type="PlayersModel" >
+	 	<!-- property表示实体类中的属性，column表示所对应的表中的字段 -->
+        <id property="id" column="id"  /><!-- 主键 -->
+        <result property="lname" column="lname"  /><!-- 其他列名 -->
+        <result property="age" column="age"  />
+        <result property="height" column="height"  />
+        <result property="position" column="position"  />
+        <result property="salary" column="salary"  />
+        <result property="team" column="team"  />
+        <result property="starter" column="starter"  />
+        <association property="teamsModel" column="t_id" select="Teams.selectOneteam"></association>
+    </resultMap>
+    
+    
+    <!-- 联查 -->
+    <select id="selectOneTeam" resultMap="playersMoBan" parameterType="string">
+    	select * from players where t_id = #{t_id}
+    </select>
+    <!-- 创建半自动SQL语句 -->
+    <!-- 全查 -->
+    <!-- select表示当前标签的名称，resultMap表示要使用的结果集(查询结果根据哪一个结果集来进行封装) -->
+    <select id="selectAll" resultMap="playersMoBan">
+    	select * from players
+    </select>
+    
+    <!-- 单一条件查询 -->
+    <!-- 注意：在向SQL语句中传参时，使用当前类型的类地址 (或者是别名)
+    	 注意：使用string进行作为参数类型时，只能传递一个参数
+    	 取出参数的形式：#{参数名称}
+    -->
+    <select id="selectOne" resultMap="playersMoBan" parameterType="string">
+    	select * from players where lname = #{lname}
+    </select>
+    <!-- 多参数查询,使用map -->
+    <select id="selectByMap" resultMap="playersMoBan" parameterType="map">
+    	select * from players where lname = #{name1} and team = #{team}
+    </select>
+    <!-- 多参数查询,使用entity -->  <!-- 使用实体查询，#的内容须于实体类中定义的属性一致 -->
+    <select id="selectEntity" resultMap="playersMoBan" parameterType="PlayersModel">
+    	select * from players where lname = #{lname} and team = #{team}    
+    </select>
+    <!-- 分页查询 -->
+    <select id="selectFen" resultMap="playersMoBan" parameterType="java.lang.Integer">
+    	select * from players limit #{pageStart},3    
+    </select>
+    <!-- 模糊查询 -->
+    <!-- 
+    	注意：使用模糊查询时，必须使用实体类或者map传参
+    	注意：使用模糊查询时，模糊部分的参数获取值时必须使用${s_name}		格式：('%${s_name}%')
+     -->
+    <select id="selectMohu" resultMap="playersMoBan" parameterType="map">
+    	select * from players where team like "%${team}%"    
+    </select>
+    <!-- 子条件查询 -->
+    <select id="selectSub" resultMap="playersMoBan" parameterType="PlayersModel">
+    	select * from players where starter in(select starter from players where lname = #{lname})    
+    </select>
+    <!-- 新增 -->
+    <insert id="insert" parameterType="map">
+    	insert into players (age,lname,height,team,salary,position) values(#{age},#{lname},#{height},#{team},#{salary},#{position})
+    </insert>
+    <!-- 修改 -->
+    <update id="update" parameterType="string">
+    	update players set salary=#{salary} where lname = "Dellavedova"
+    </update>
+    <!-- 删除 -->
+    <delete id="delete" parameterType="string">
+    	delete from players where id = #{id}
+    </delete>
+    <!-- 动态SQL语句1 if判断  最常用-->
+   <!--  <select id="dong1" parameterType="studentEntity" resultMap="student">
+    	select * from student where  1=1
+    	<if test="s_name != null">
+    		and s_name=#{s_name}
+    	</if>
+    	注意：当属性为int类型时，判断条件为!=0
+    	<if test="s_age != 0">
+    		and s_age=#{s_age}
+    	</if>
+    </select>
+    
+    动态SQL语句2 选择  比较常用
+    <select id="dong2" parameterType="studentEntity" resultMap="student">
+    	select * from student where 1=1
+    	<choose>
+    		<when test="s_age != 0">
+    			and s_age=#{s_age}
+    		</when>
+    		<when test="s_name != null">
+    			and s_name like '%${s_name}%'
+    		</when>
+    		<otherwise>
+    			order by s_age
+    		</otherwise>
+    	</choose>
+    </select>
+    
+    动态sql语句，基本不用
+   <select id="dong3" resultMap="student" parameterType="studentEntity">
+   	select * from student
+   	trim表示动态添加条件，prefix表示添加前缀，prefixOverrides表示可以使用的条件，suffix表示后缀
+   	<trim prefix="where" prefixOverrides="and|or">
+		<if test="s_sex !=null">
+   			and s_sex=#{s_sex}
+   		</if>
+   	</trim>
+   	</select>
+   	
+   	
+   	批量新增
+   	<insert id="insertStudentMore" parameterType="studentEntity">
+   		insert into student (s_id,s_name,s_sex,s_age) values 
+   		separator表示以什么为间隔
+   		<foreach collection="list" index="index" item="item" separator=",">
+   			(#{item.s_id},#{item.s_name},#{item.s_sex},#{item.s_age})
+   		</foreach>
+   	</insert> -->
+</mapper>
+
+
+

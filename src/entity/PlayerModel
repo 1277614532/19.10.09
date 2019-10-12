@@ -1,0 +1,90 @@
+public class PlayersModel implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	private int id;
+	private String lname;
+	private int age;
+	private int height;
+	private String position;
+	private Double salary;
+	private String team;
+	private String starter;
+	//多对一中，多的一方写一的一方的实体
+	private TeamsModel teamsModel;
+	
+	public String getPosition() {
+		return position;
+	}
+	public void setPosition(String position) {
+		this.position = position;
+	}
+	public TeamsModel getTeamsModel() {
+		return teamsModel;
+	}
+	public void setTeamsModel(TeamsModel teamsModel) {
+		this.teamsModel = teamsModel;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getlname() {
+		return lname;
+	}
+	public void setlname(String lname) {
+		this.lname = lname;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	public String getStarter() {
+		return starter;
+	}
+	public void setStarter(String starter) {
+		this.starter = starter;
+	}
+	public Double getSalary() {
+		return salary;
+	}
+	public void setSalary(Double salary) {
+		this.salary = salary;
+	}
+	public String getTeam() {
+		return team;
+	}
+	public void setTeam(String team) {
+		this.team = team;
+	}
+	
+	public PlayersModel(int id, String lname, int age, int height, String position, Double salary, String team,
+			String starter) {
+		super();
+		this.id = id;
+		this.lname = lname;
+		this.age = age;
+		this.height = height;
+		this.position = position;
+		this.salary = salary;
+		this.team = team;
+		this.starter = starter;
+	}
+	
+	public PlayersModel() {}
+	@Override
+	public String toString() {
+		return "PlayersModel [id=" + id + ", lname=" + lname + ", age=" + age + ", height=" + height + ", position="
+				+ position + ", salary=" + salary + ", team=" + team + ", starter=" + starter + "]";
+	}
+}

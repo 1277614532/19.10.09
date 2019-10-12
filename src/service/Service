@@ -1,0 +1,13 @@
+@Service("playersService")
+public class PlayersService {
+
+	@Resource(name="DaoImpl")
+	private DAO dao;
+	
+	public List<PlayersModel> queryAll(){
+		return (List<PlayersModel>) dao.selectByModel("Players.selectAll");
+		
+	}
+	
+	
+}
